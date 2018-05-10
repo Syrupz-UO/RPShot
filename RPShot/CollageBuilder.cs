@@ -52,32 +52,27 @@ namespace RPShot
             int xOffset = 0;
             row = 0;
 
+            Image img;
+
             foreach (FileInfo image in images)
             {
-                Image img = Image.FromFile("images/" + image.Name);
+                img = Image.FromFile("images/" + image.Name);
 
                 int width = img.Width;
                 int height = img.Height;
 
-                Console.WriteLine("Loaded image " + image.Name + " with dimensions" + width + "," + height);
 
                 double factor = (double)newImageHeight / height;
 
-                Console.WriteLine("factor: " + factor);
 
                 int newImageWidth = (int)(width * factor);
 
-                Console.WriteLine("new width: " + newImageWidth);
 
                 img = ScaleImage(img, this.maxWidth, newImageHeight);
 
                 Bitmap resizedImage = new Bitmap(img);
                 newImageWidth = img.Width;
 
-
-                resizedImage.Save("output/" + image.Name, ImageFormat.Png);
-
-                Console.WriteLine("Resized to " + newImageWidth + "," + newImageHeight);
 
                 if (xOffset + newImageWidth + borderWidth > maxWidth)
                 {
@@ -88,11 +83,30 @@ namespace RPShot
                 int requiredHeight = (int)Math.Ceiling((double)((row + 1) * newImageHeight + (row + 1) * borderWidth + borderWidth));
 
                 if (bmapCanvas.Height < requiredHeight)
+                    Console.WriteLine("resizing to " + requiredHeight );
                 {
-                 //   Console.WriteLine("extending");
-                 //   bmapCanvas = new Bitmap(bmapCanvas, this.maxWidth, requiredHeight);
-                 //   canvas = Graphics.FromImage(bmapCanvas);
-                  //  canvas.CompositingMode = CompositingMode.SourceOver;
+                    Rectangle rec = new Rectangle(
+                  0,
+                  0,
+                  this.maxWidth,
+                  requiredHeight
+                  );
+        
+
+                    Bitmap target = new Bitmap(
+                        rec.Width,
+                        rec.Height
+                    );
+
+                    using (Graphics g = Graphics.FromImage(target))
+                    {
+                        g.DrawImage(bmapCanvas, new Rectangle(0, 0, target.Width, target.Height),
+                                         rec,
+                                         GraphicsUnit.Pixel);
+                    }
+
+                    bmapCanvas = target;
+                    canvas = Graphics.FromImage(bmapCanvas);
                 }
 
 
@@ -116,7 +130,7 @@ namespace RPShot
 
             TrimImage();
 
-            bmapCanvas.Save("output/report.png", ImageFormat.Png);
+            bmapCanvas.Save("output/" + (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds + "-report.png", ImageFormat.Png);
         }
 
         private void PrepareParams()
@@ -156,9 +170,24 @@ namespace RPShot
                 this.rightMostPoint + this.borderWidth,
                 (row + 1) * this.newImageHeight + (this.borderWidth * (this.row + 2))
                 );
-            bmapCanvas = bmapCanvas.Clone(rec, bmapCanvas.PixelFormat);
-         //  bmapCanvas = new Bitmap(bmapCanvas, this.rightMostPoint + this.borderWidth, row * this.newImageHeight + (this.borderWidth * (this.row + 1)));
-         //  canvas = Graphics.FromImage(bmapCanvas);
+            //bmapCanvas = bmapCanvas.Clone(rec, bmapCanvas.PixelFormat);
+           // bmapCanvas.Width = this.rightMostPoint + this.borderWidth;
+            //  bmapCanvas = new Bitmap(bmapCanvas, this.rightMostPoint + this.borderWidth, row * this.newImageHeight + (this.borderWidth * (this.row + 1)));
+            //  canvas = Graphics.FromImage(bmapCanvas);
+
+            Bitmap target = new Bitmap(
+                rec.Width,
+                rec.Height
+            );
+
+            using (Graphics g = Graphics.FromImage(target))
+            {
+                g.DrawImage(bmapCanvas, new Rectangle(0, 0, target.Width, target.Height),
+                                 rec,
+                                 GraphicsUnit.Pixel);
+            }
+
+            bmapCanvas = target;
         }
     }
 }

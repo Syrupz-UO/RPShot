@@ -61,7 +61,7 @@
             this.imageDisplay.Location = new System.Drawing.Point(142, 29);
             this.imageDisplay.Name = "imageDisplay";
             this.imageDisplay.Size = new System.Drawing.Size(292, 186);
-            this.imageDisplay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imageDisplay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imageDisplay.TabIndex = 3;
             this.imageDisplay.TabStop = false;
             // 

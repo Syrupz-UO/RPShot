@@ -40,7 +40,7 @@
             this.cropImageBox.Location = new System.Drawing.Point(0, 0);
             this.cropImageBox.Name = "cropImageBox";
             this.cropImageBox.Size = new System.Drawing.Size(284, 261);
-            this.cropImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.cropImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.cropImageBox.TabIndex = 0;
             this.cropImageBox.TabStop = false;
             this.cropImageBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cropImageBox_MouseDown);

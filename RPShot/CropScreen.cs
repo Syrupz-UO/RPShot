@@ -16,13 +16,14 @@ namespace RPShot
         private int xDown, yDown, xUp, yUp;
         private Image baseImage;
         private string currentFilename = "";
+        private MainWindow mainWindow;
 
         public CropScreen()
         {
             InitializeComponent();
 
             //setting form to 80% of screen resolution:
-            const int _const = 80;
+            const int _const = 100;
             int screenWidth = Screen.PrimaryScreen.Bounds.Width;
             int screenHeight = Screen.PrimaryScreen.Bounds.Height;
 
@@ -40,6 +41,11 @@ namespace RPShot
 
             baseImage = img;
             this.cropImageBox.Image = img;
+        }
+
+        public void SetMainWindow(MainWindow mainWindow)
+        {
+            this.mainWindow = mainWindow;
         }
 
         private void cropImageBox_MouseDown(object sender, MouseEventArgs e)
@@ -67,16 +73,16 @@ namespace RPShot
         {
             if (!clicked) { return; }
 
-            xUp = e.X;
-            yUp = e.Y;
-            cropImageBox.Invalidate();
-            drawRect();
-            Console.WriteLine("move");
+          //  xUp = e.X;
+         //   yUp = e.Y;
+         //   cropImageBox.Invalidate();
+         //   drawRect();
+         //   Console.WriteLine("move");
         }
 
         private void drawRect() {
-            Rectangle rec = new Rectangle(xDown, yDown, Math.Abs(xUp - xDown), Math.Abs(yUp - yDown));
-            using (Pen pen = new Pen(Color.YellowGreen, 3))
+            Rectangle rec = new Rectangle(Math.Min(xDown, xUp), Math.Min(yDown, yUp), Math.Abs(xUp - xDown), Math.Abs(yUp - yDown));
+            using (Pen pen = new Pen(Color.LightSalmon, 1))
             {
                 //cropImageBox.Invalidate();
                 //cropImageBox.Image = baseImage;
@@ -86,7 +92,11 @@ namespace RPShot
 
         private void cropButton_Click(object sender, EventArgs e)
         {
-            Rectangle rec = new Rectangle(xDown, yDown, Math.Abs(xUp - xDown), Math.Abs(yUp - yDown));
+            Rectangle rec = new Rectangle(
+                Math.Min(xDown, xUp),
+                Math.Min(yDown, yUp),
+                Math.Abs(xUp - xDown),
+                Math.Abs(yUp - yDown));
             Bitmap src = cropImageBox.Image as Bitmap;
             Bitmap croppedImage = src.Clone(rec, src.PixelFormat);
             cropImageBox.Invalidate();
@@ -98,6 +108,7 @@ namespace RPShot
             Console.WriteLine(currentFilename);
             //System.IO.File.WriteAllText("images/foo.txt", "Testing valid path & permissions.");
             cropImageBox.Image.Save(currentFilename);
+            this.mainWindow.RefreshThumbnail();
             this.Close();
         }
     }

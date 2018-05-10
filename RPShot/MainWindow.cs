@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing.Imaging;
+using System.Diagnostics;
 
 namespace RPShot
 {
@@ -47,9 +49,11 @@ namespace RPShot
         public MainWindow()
         {
             InitializeComponent();
+            sc = new ScreenCapture();
         }
 
-        private int imageCount = 0;
+        private int imageCount = 1;
+        private ScreenCapture sc;
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -57,25 +61,25 @@ namespace RPShot
             FileInfo[] Files = d.GetFiles("*.png"); //Getting Text files
             foreach (FileInfo file in Files)
             {
-                imageCount += 1;
                 screenshotList.Items.Add(file.Name);
             }
+
+            imageCount = Files.Length;
         }
 
         private void screenshotButton_Click(object sender, EventArgs e)
         {
-            ScreenCapture sc = new ScreenCapture();
             // capture entire screen, and save it to a file
-            Image img = sc.CaptureScreen();
+           // Image img = sc.CaptureScreen();
             // display image in a Picture control named imageDisplay
             // capture this window, and save it
             imageCount += 1;
             string fileName = imageCount + ".png";
             fileName = fileName.PadLeft(8, '0');
-            img.Save("images/" + fileName);
-           // sc.CaptureWindowToFile(this.Handle, "images/" + fileName, System.Drawing.Imaging.ImageFormat.Png);
+            sc.CaptureScreenToFile("images/" + fileName, ImageFormat.Png);
             screenshotList.Items.Add(fileName);
             screenshotList.SelectedIndex = screenshotList.Items.Count - 1;
+            System.GC.Collect();
         }
 
         private void cropButton_Click(object sender, EventArgs e)
@@ -84,7 +88,26 @@ namespace RPShot
 
             CropScreen crpScrn = new CropScreen();
             crpScrn.SetImage(screenshotList.GetItemText(screenshotList.SelectedItem));
+            crpScrn.SetMainWindow(this);
             crpScrn.ShowDialog();
+        }
+
+        public void RefreshThumbnail()
+        {
+            if (screenshotList.SelectedIndex == -1)
+            {
+                imageDisplay.Image = null;
+            }
+            else
+            {
+                Image img;
+                using (var bmpTemp = new Bitmap("images/" + screenshotList.GetItemText(screenshotList.SelectedItem)))
+                {
+                    img = new Bitmap(bmpTemp);
+                }
+                this.imageDisplay.Image = img;
+            }
+            System.GC.Collect();
         }
 
         private void screenshotList_SelectedValueChanged(object sender, EventArgs e)
@@ -92,12 +115,12 @@ namespace RPShot
             if (screenshotList.SelectedIndex == -1) { return; }
 
             Image img;
-            Console.WriteLine(screenshotList.GetItemText(screenshotList.SelectedItem));
             using (var bmpTemp = new Bitmap("images/" + screenshotList.GetItemText(screenshotList.SelectedItem)))
             {
                 img = new Bitmap(bmpTemp);
             }
             this.imageDisplay.Image = img;
+            System.GC.Collect();
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
@@ -107,12 +130,15 @@ namespace RPShot
             string filename = "images/" + screenshotList.GetItemText(screenshotList.SelectedItem);
             File.Delete(filename);
             screenshotList.Items.RemoveAt(screenshotList.SelectedIndex);
+            RefreshThumbnail();
         }
 
         private void combineButton_Click(object sender, EventArgs e)
         {
             CollageBuilder cb = new CollageBuilder();
             cb.Build();
+            Process.Start(@"output");
+            System.GC.Collect();
         }
     }
 }
