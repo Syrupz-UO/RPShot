@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Diagnostics;
 
 
 namespace RPShot
@@ -25,7 +26,16 @@ namespace RPShot
         /// <returns></returns>
         public Image CaptureScreen()
         {
-            return CaptureWindow(GetForegroundWindow());
+            IntPtr hWnd = IntPtr.Zero;
+            foreach (Process pList in Process.GetProcesses())
+            {
+                if (pList.MainWindowTitle.Contains("Ultima Online"))
+                {
+                    hWnd = pList.MainWindowHandle;
+                }
+            }
+           // return hWnd; //Should contain the handle but may be zero if the title doesn't match
+            return CaptureWindow(hWnd);
             //return CaptureWindow(User32.GetDesktopWindow());
         }
         /// <summary>

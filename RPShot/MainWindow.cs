@@ -17,37 +17,6 @@ namespace RPShot
 {
     public partial class MainWindow : Form
     {
-        protected override bool ShowWithoutActivation
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        private const int WM_MOUSEACTIVATE = 0x0021, MA_NOACTIVATE = 0x0003;
-
-        protected override void WndProc(ref Message m)
-        {
-            if (m.Msg == WM_MOUSEACTIVATE)
-            {
-                m.Result = (IntPtr)MA_NOACTIVATE;
-                return;
-            }
-            base.WndProc(ref m);
-        }
-
-        private const int WS_EX_NOACTIVATE = 0x08000000;
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams createParams = base.CreateParams;
-                createParams.ExStyle |= WS_EX_NOACTIVATE;
-                return createParams;
-            }
-        }
-
         public MainWindow()
         {
             InitializeComponent();
@@ -81,6 +50,12 @@ namespace RPShot
 
         private void HotKeyManagerPressed(object sender, KeyPressedEventArgs e)
         {
+            Console.WriteLine(e.HotKey.Key.ToString());
+           // if (e.HotKey.Key == keyData)
+           // {
+          //      Console.WriteLine("triggering!");
+
+          //  }
             if (e.HotKey.Key == Key.PrintScreen)
                 screenshotButton_Click(sender, e);
         }
@@ -157,6 +132,34 @@ namespace RPShot
             cb.Build();
             Process.Start(@"output");
             System.GC.Collect();
+        }
+
+        Key Hotkey;
+        Keys keyData;
+        string keyCombo = "";
+        private void hotkeyField_KeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine(e.KeyData.ToString());
+            hotkeyField.Text = e.KeyData.ToString();// e.KeyData.ToString();
+            keyCombo = e.KeyData.ToString();
+            if (keyCombo == e.KeyData.ToString())
+            {
+                Console.WriteLine("same key pressed");
+            }
+
+            keyData = e.KeyData;
+            // Hotkey = e.;
+            e.Handled = true;
+        }
+
+        private void hotkeyField_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            
+        }
+
+        private void hotkeyField_KeyUp(object sender, KeyEventArgs e)
+        {
+            
         }
     }
 }

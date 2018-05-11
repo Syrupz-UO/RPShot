@@ -35,6 +35,9 @@
             this.deleteButton = new System.Windows.Forms.Button();
             this.screenshotButton = new System.Windows.Forms.Button();
             this.combineButton = new System.Windows.Forms.Button();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.label2 = new System.Windows.Forms.Label();
+            this.hotkeyField = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.imageDisplay)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,22 +55,22 @@
             this.screenshotList.FormattingEnabled = true;
             this.screenshotList.Location = new System.Drawing.Point(16, 29);
             this.screenshotList.Name = "screenshotList";
-            this.screenshotList.Size = new System.Drawing.Size(120, 186);
+            this.screenshotList.Size = new System.Drawing.Size(175, 186);
             this.screenshotList.TabIndex = 1;
             this.screenshotList.SelectedValueChanged += new System.EventHandler(this.screenshotList_SelectedValueChanged);
             // 
             // imageDisplay
             // 
-            this.imageDisplay.Location = new System.Drawing.Point(142, 29);
+            this.imageDisplay.Location = new System.Drawing.Point(197, 29);
             this.imageDisplay.Name = "imageDisplay";
-            this.imageDisplay.Size = new System.Drawing.Size(292, 186);
+            this.imageDisplay.Size = new System.Drawing.Size(237, 186);
             this.imageDisplay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imageDisplay.TabIndex = 3;
             this.imageDisplay.TabStop = false;
             // 
             // cropButton
             // 
-            this.cropButton.Location = new System.Drawing.Point(223, 219);
+            this.cropButton.Location = new System.Drawing.Point(278, 219);
             this.cropButton.Name = "cropButton";
             this.cropButton.Size = new System.Drawing.Size(75, 23);
             this.cropButton.TabIndex = 4;
@@ -79,7 +82,7 @@
             // 
             this.deleteButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.deleteButton.Location = new System.Drawing.Point(142, 219);
+            this.deleteButton.Location = new System.Drawing.Point(197, 219);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(75, 23);
             this.deleteButton.TabIndex = 5;
@@ -99,7 +102,7 @@
             // 
             // combineButton
             // 
-            this.combineButton.Location = new System.Drawing.Point(304, 219);
+            this.combineButton.Location = new System.Drawing.Point(359, 219);
             this.combineButton.Name = "combineButton";
             this.combineButton.Size = new System.Drawing.Size(75, 23);
             this.combineButton.TabIndex = 7;
@@ -107,11 +110,32 @@
             this.combineButton.UseVisualStyleBackColor = true;
             this.combineButton.Click += new System.EventHandler(this.combineButton_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(97, 224);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(28, 13);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "Key:";
+            // 
+            // hotkeyField
+            // 
+            this.hotkeyField.Location = new System.Drawing.Point(131, 219);
+            this.hotkeyField.Name = "hotkeyField";
+            this.hotkeyField.Size = new System.Drawing.Size(59, 20);
+            this.hotkeyField.TabIndex = 9;
+            this.hotkeyField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.hotkeyField_KeyDown);
+            this.hotkeyField.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.hotkeyField_KeyPress);
+            this.hotkeyField.KeyUp += new System.Windows.Forms.KeyEventHandler(this.hotkeyField_KeyUp);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(446, 254);
+            this.Controls.Add(this.hotkeyField);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.combineButton);
             this.Controls.Add(this.screenshotButton);
             this.Controls.Add(this.deleteButton);
@@ -140,6 +164,9 @@
         private System.Windows.Forms.Button deleteButton;
         private System.Windows.Forms.Button screenshotButton;
         private System.Windows.Forms.Button combineButton;
+        private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox hotkeyField;
     }
 }
 
