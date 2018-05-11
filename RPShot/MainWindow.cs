@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Diagnostics;
+using GlobalHotKey;
+using System.Windows.Input;
 
 namespace RPShot
 {
@@ -65,6 +67,22 @@ namespace RPShot
             }
 
             imageCount = Files.Length;
+
+            HotKeyManager hotKeyManager = new HotKeyManager();
+
+            // Register Ctrl+Alt+F5 hotkey. Save this variable somewhere for the further unregistering.
+            var hotKey = hotKeyManager.Register(Key.PrintScreen, System.Windows.Input.ModifierKeys.None);
+
+            // Handle hotkey presses.
+            hotKeyManager.KeyPressed += HotKeyManagerPressed;
+        }
+
+        
+
+        private void HotKeyManagerPressed(object sender, KeyPressedEventArgs e)
+        {
+            if (e.HotKey.Key == Key.PrintScreen)
+                screenshotButton_Click(sender, e);
         }
 
         private void screenshotButton_Click(object sender, EventArgs e)
